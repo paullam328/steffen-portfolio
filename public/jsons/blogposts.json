@@ -1,0 +1,32 @@
+[{
+	 "title": "How to be a great developer",
+	"date": "06/02/2020",
+	"text": "However, that article is still the best article I've ever written. Not because the article was so good, obviously, but because there is no single article or even book that taught me more than that article. The article was about some object-oriented programming (OOP) concepts, which may sound interesting, except I didn't know what object-oriented programming was.",
+ 	"image": "/images/_Steffen-SkiingJH2019-03.jpg",
+ 	"comments": [{
+ 		"name": "Steve",
+ 		"comment": "you need more practice"
+ 	}, {
+ 		"name": "Tom",
+ 		"comment": "you need more practice 2"
+ 	}, {
+ 		"name": "Steve",
+ 		"comment": "you need more practice 3"
+    }]
+},
+{
+	"title": "How to be a great developer?",
+	"date": "05/02/2020",
+   "text": "Get Good",
+	"image": "/images/steffen.png",
+	"comments": [{
+		"name": "Steve",
+		"comment": "you need more practice"
+	}, {
+		"name": "Tom",
+		"comment": "you need more practice 2"
+	}, {
+		"name": "Steve",
+		"comment": "you need more practice 3"
+   }]
+}]
