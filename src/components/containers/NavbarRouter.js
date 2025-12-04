@@ -1,85 +1,95 @@
-import React from 'react';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Navbar, Nav } from 'react-bootstrap';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+} from 'react-router-dom';
 
 import Blog from '../pages/Blog';
 import Home from '../pages/Home';
-import Blogpost from '../pages/Blogpost'
-import Gallery from '../pages/Gallery'
-import Calendar from '../pages/Calendar'
-import Admin from '../pages/Admin'
+import Blogpost from '../pages/Blogpost';
+import Gallery from '../pages/Gallery';
+import Calendar from '../pages/Calendar';
+import Admin from '../pages/Admin';
 
-class NavbarRouter extends React.Component {
+const NavbarRouter = () => {
+  // Use 255 instead of 256 for valid RGB, but keep your original structure
+  const [navColor, setNavColor] = useState([255, 255, 255]);
 
-    constructor(props) {
-      super(props);
-      this.state = {
-        navColor: [256, 256, 256]
-      }
-    }
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollVal = window.scrollY / window.innerWidth;
+      const aboutPageVal = (Math.round(scrollVal * 100) - 50) * 5;
 
-    componentDidMount() {
-      window.addEventListener('scroll', this.handleScroll, true);
-    }
-
-    handleScroll = () => {
-
-      var scrollVal = window.scrollY/window.innerWidth;
-
-      var aboutPageVal = (Math.round(scrollVal*100) - 50) * 5;
-
-      //lerp from white to gray:
-      const wrgb = 255;
       if (aboutPageVal > -100 && aboutPageVal < 50) {
-          var lerpLength = 100 - -50;
-          var progress = aboutPageVal + 100; //start from 0 -150 + 150 = 0
-          var proportion = progress / lerpLength;
-          this.setState({navColor:[
-              256 - (proportion * (256 - 205)),
-              256 - (proportion * (256 - 92)),
-              256 - (proportion * (256 - 92))]});
+        const lerpLength = 100 - -50; // 150
+        const progress = aboutPageVal + 100; // -100 -> 0, 50 -> 150
+        const proportion = progress / lerpLength;
+
+        const base = 255;
+        const rTarget = 205;
+        const gTarget = 92;
+        const bTarget = 92;
+
+        const r = base - proportion * (base - rTarget);
+        const g = base - proportion * (base - gTarget);
+        const b = base - proportion * (base - bTarget);
+
+        setNavColor([r, g, b]);
       }
-    }
+    };
 
-    resetNav=() => {
-      this.setState({navColor:[256,256,256]});
-    } 
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    render() {
-      return (
-        <Router>
-        <Navbar className="navbar-top-right" expand="lg">
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const resetNav = () => {
+    setNavColor([255, 255, 255]);
+  };
+
+  const [r, g, b] = navColor;
+  const linkStyle = { color: `rgb(${r}, ${g}, ${b})`, marginLeft: '1rem' };
+
+  return (
+    <Router>
+      <Navbar className="navbar-top-right" expand="lg">
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-              <Link style={{color:`rgb(${this.state.navColor[0]},
-                      ${this.state.navColor[1]},
-                      ${this.state.navColor[2]})`}} to="/" onClick={this.resetNav}>Home</Link>
-            
-              <Link style={{color:`rgb(${this.state.navColor[0]},
-                      ${this.state.navColor[1]},
-                      ${this.state.navColor[2]})`}} to="/Blog" onClick={this.resetNav}>Blog</Link>
-              <Link style={{color:`rgb(${this.state.navColor[0]},
-                      ${this.state.navColor[1]},
-                      ${this.state.navColor[2]})`}} to="/Gallery" onClick={this.resetNav}>Gallery</Link>
-              <Link style={{color:`rgb(${this.state.navColor[0]},
-                      ${this.state.navColor[1]},
-                      ${this.state.navColor[2]})`}} to="/Calendar" onClick={this.resetNav}>Calendar</Link>
+            <Link style={linkStyle} to="/" onClick={resetNav}>
+              Home
+            </Link>
+
+            <Link style={linkStyle} to="/Blog" onClick={resetNav}>
+              Blog
+            </Link>
+
+            <Link style={linkStyle} to="/Gallery" onClick={resetNav}>
+              Gallery
+            </Link>
+
+            <Link style={linkStyle} to="/Calendar" onClick={resetNav}>
+              Calendar
+            </Link>
           </Nav>
         </Navbar.Collapse>
-    </Navbar>
+      </Navbar>
 
-          <Switch>
-            <Route path="/Blog" component={Blog}/>
-            <Route exact path="/" component={Home}/>            
-            <Route path="/Gallery" component={Gallery}/>
-            <Route path="/Calendar" component={Calendar}/>
-            <Route path="/Admin" component={Admin}/>
-            <Route path="/blogpost/:blogObj" component={Blogpost} />
-          </Switch>
-        </Router>
-      );
-  }
-}
+      <Routes>
+        <Route path="/Blog" element={<Blog />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/Gallery" element={<Gallery />} />
+        <Route path="/Calendar" element={<Calendar />} />
+        <Route path="/Admin" element={<Admin />} />
+        <Route path="/blogpost/:blogObj" element={<Blogpost />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default NavbarRouter;

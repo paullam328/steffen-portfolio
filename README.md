@@ -1,5 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## How to run
+
+1. npm install
+2. Ensure port 3000 isn't occupied
+3. npm start
+
 ## Available Scripts
 
 In the project directory, you can run:

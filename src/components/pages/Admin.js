@@ -1,78 +1,58 @@
-import React from 'react';
-import { Row, Col, Card, Image, Form, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 
-class Admin extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            blogObj: {}
-        }
-    }
+// WIP
 
-    render() {
-      return (
-          <div className="admin">
-              {/* <Row>
-                  <Col xs="12" style={{backgroundColor:"blue", padding:"20px", color:"white"}}>
-                    <h1>Administrative Panel</h1>
-                  </Col>
-              </Row>
-              <Form>
-              <Form.Group controlId="formBasicUser">
-              <Row>
-              <Col xs="3">
+const Admin = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Admin login:', { username, password });
+  };
 
-                            <Form.Label>Username: </Form.Label>
+  return (
+    <div className="admin">
+      <Row>
+        <Col
+          xs="12"
+          style={{ backgroundColor: 'blue', padding: '20px', color: 'white' }}
+        >
+          <h1>Administrative Panel</h1>
+        </Col>
+      </Row>
 
+      <Form onSubmit={handleSubmit} style={{ padding: '20px' }}>
+        <Form.Group controlId="formBasicUsername" className="mb-3">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Form.Text className="text-muted">
+            We'll never share your username with anyone else.
+          </Form.Text>
+        </Form.Group>
 
-                  </Col>
-                  <Col xs="6">
-                  <Form.Control type="password"></Form.Control>
-                  </Col>
-              </Row>
+        <Form.Group controlId="formBasicPassword" className="mb-3">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Group>
 
-              <Row>
-              <Col xs="3">
-
-
-                            <Form.Label>Password: </Form.Label>
-
-
-                  </Col>
-                  <Col xs="6">
-                  <Form.Control type="password"></Form.Control>
-                  </Col>
-              </Row>
-              </Form.Group>
-              </Form> */}
-              <Row>
-                  <Col xs="12" style={{backgroundColor:"blue", padding:"20px", color:"white"}}>
-                    <h1>Administrative Panel</h1>
-                  </Col>
-            </Row>
-
-            <Form>
-            <Form.Group controlId="formBasicUsername">
-                <Form.Label>Username</Form.Label>
-                <Form.Control type="username" placeholder="Enter username" />
-                <Form.Text className="text-muted">
-                We'll never share your username with anyone else.
-                </Form.Text>
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-            </Form>
-        </div>
-      );
-  }
-}
-//https://calendar.google.com/calendar/embed?src=paullam328%40gmail.com&ctz=America%2FVancouver
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
+    </div>
+  );
+};
 
 export default Admin;

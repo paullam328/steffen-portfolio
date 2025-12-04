@@ -1,74 +1,71 @@
-import React from 'react';
-import { Row, Col, Card, Image } from 'react-bootstrap';
-import listReactFiles from 'list-react-files'
-import glob from 'glob';
-import * as fs from 'fs';
-import $ from 'jquery';
-import * as requireContext from 'require-context';
-class Gallery extends React.Component {
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Image } from 'react-bootstrap';
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            imgArray: []
-        }
-    }
+const Gallery = () => {
+  const [imgArray, setImgArray] = useState([]);
 
-    //files are read from the server - ajax
-    componentDidMount() {
-        //Jesus, finally found a way to import all the pics...
-        var imgs = this.importAll(require.context('./../../../public/images/gallery', false,/\.(png|jpe?g|svg)$/));
-        this.setState({imgArray: imgs});
-    }
+  useEffect(() => {
+    const importAll = (r) => r.keys().map(r);
 
-    importAll(r) {
-        return r.keys().map(r);
-    }
+    const imgs = importAll(
+      require.context(
+        './../../../public/images/gallery',
+        false,
+        /\.(png|jpe?g|svg)$/
+      )
+    );
 
-    fetchAllImgsDisplay() {
-        //console.log(get("/images").then(files => {console.log("file names: "); console.log(files);}))
-        var galleryToPage = this.state.imgArray.map( (img1, index) => {
-            if (index % 4 == 0) {
-                //create new row:
+    setImgArray(imgs);
+  }, []);
 
-                return (  
-                    <Row>
-                        {this.state.imgArray.map( (img2, index2) => {
-                            console.log("T");
-                            if (index2 >= index && index2 < index + 4)
-                            {
-                                return (
-                                <Col md="3" className="container-fluid" style={{
-                                    backgroundImage:`url("${img2}")`,
-                                    backgroundSize:'cover',
-                                    backgroundRepeat:'no-repeat',
-                                    backgroundPosition:'center'}}>
-                                    <Image className={`galleryImg galleryImg${index2}`} style={{
-                                    opacity:'0'}} src={img2} fluid />
-                                </Col>);
-                            }
-                        })}
-                    </Row>)
-            }
-        });
-        return galleryToPage;
-    }
+  const renderImageRows = () => {
+    const rows = [];
 
-    render() {
-      return (
-          <div className="gallery">
-            <Row className="navArea">
+    for (let i = 0; i < imgArray.length; i += 4) {
+      const chunk = imgArray.slice(i, i + 4);
 
-            </Row>
-            <Row className="mainArea galleryArea no-margin">
-                <Col mx="12">
-                {this.fetchAllImgsDisplay()}
-                </Col>
-            </Row>
-          </div>
+      rows.push(
+        <Row key={i}>
+          {chunk.map((imgSrc, idx) => {
+            const globalIndex = i + idx;
 
+            return (
+              <Col
+                key={globalIndex}
+                md="3"
+                className="container-fluid"
+                style={{
+                  backgroundImage: `url("${imgSrc}")`,
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <Image
+                  className={`galleryImg galleryImg${globalIndex}`}
+                  style={{ opacity: 0 }}
+                  src={imgSrc}
+                  fluid
+                />
+              </Col>
+            );
+          })}
+        </Row>
       );
-  }
-}
+    }
+    return rows;
+  };
+
+  return (
+    <div className="gallery">
+      <Row className="navArea" />
+      <Row className="mainArea galleryArea no-margin">
+        <Col xs="12">
+          {renderImageRows()}
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
 export default Gallery;
